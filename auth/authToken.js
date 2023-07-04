@@ -40,6 +40,6 @@ exports.authTokenAdmin = (req,res,next) => {
     }
     catch(err){
       console.log(err);
-      return res.status(401).json({msg:"Token invalid or expired, log in again or you hacker!"})
+      return res.status(401).json({msg:"Token invalid or expired, log in again !"})
     }
   }

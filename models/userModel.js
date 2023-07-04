@@ -35,13 +35,13 @@ exports.UserValid = (_bodyValid) => {
         },
         email: Joi.string().min(2).max(99).email().required(),
         password: Joi.string().min(3).max(99).required(),
-        img: Joi.string().min(2).max(150)
+        img: Joi.string().min(2)
     })
     return joiSchema.validate(_bodyValid);
 }
 
 exports.createToken = (_id, role) => {
-    let token = jwt.sign({ _id, role }, config.tokenSecret, { expiresIn: "60mins" });
+    let token = jwt.sign({ _id, role }, config.tokenSecret, { expiresIn: "90mins" });
     return token;
 }
 

@@ -13,7 +13,7 @@ exports.ScoreModel = mongoose.model("scores", scoreSchema)
 
 exports.validateScore = (_reqBody) => {
     let joiSchema = Joi.object({
-        score: Joi.number().min(2).max(150).required()
+        score: Joi.number().min(2).max(1000000000).required()
     })
     return joiSchema.validate(_reqBody);
 }

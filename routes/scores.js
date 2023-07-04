@@ -61,13 +61,14 @@ router.post("/", authToken, async (req, res) => {
   let validBody = validateScore(req.body);
   if (validBody.error) {
     res.status(400).json(validBody.error.details)
+    return;
   }
   try {
     console.log(req.tokenData._id)
     let score = new ScoreModel(req.body);
     score.user_id = req.tokenData._id;
-    await score.save();
-    res.json(score);
+    let data = await score.save();
+    res.json(data);
   }
   catch (err) {
     console.log(err)
@@ -94,11 +95,11 @@ router.delete("/:idDel", authToken, async (req, res) => {
 })
 
 
-router.patch("/changeScore/:userID", authTokenAdmin, async (req, res) => {
+router.patch("/changeScore/:userID",  async (req, res) => {
     try {
     let userID = req.params.userID
   
-    let data = await ScoreModel.updateOne({ _id: userID }, { role: req.body.score })
+    let data = await ScoreModel.updateOne({ user_id: userID }, { score: req.body.score })
     res.json(data);
   }
   catch (err) {

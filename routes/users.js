@@ -87,7 +87,7 @@ router.post("/register", async(req,res) => {
   }
   catch(err){
     if(err.code == 11000){
-      return res.status(500).json({msg:"Email already in system, try log in",code:11000})
+      return res.status(500).json({msg:"Email already exists, try  to log in",code:11000})
        
     }
     console.log(err);
@@ -105,12 +105,12 @@ router.post("/login", async (req, res) => {
     let user = await UserModel.findOne({ email: req.body.email })
     if (!user) {
       // שגיאת אבטחה שנשלחה מצד לקוח
-      return res.status(401).json({ msg: "User and password not match 1" })
+      return res.status(401).json({ msg: "there was a problem. try again later" })
     }
     // בדיקה הסימא אם מה שנמצא בבאדי מתאים לסיסמא המוצפנת במסד
     let validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) {
-      return res.status(401).json({ msg: "User and password not match 2" })
+      return res.status(401).json({ msg: "your email or password are incorrect. " })
     }
     
     console.log(user._id)
@@ -146,7 +146,7 @@ router.put("/:editId", authTokenAdmin, async (req, res) => {
   }
   catch (err) {
     console.log(err);
-    res.status(500).json({ msg: "there error try again later", err })
+    res.status(500).json({ msg: "there was a problem. try again later", err })
   }
 })
 
@@ -182,7 +182,8 @@ router.delete("/:idDel", authTokenAdmin, async (req, res) => {
       return res.status(401).json({ msg: "You cant delete superadmin" });
 
     }
-    data = await UserModel.deleteOne({ _id: idDel });
+    // data = await UserModel.deleteOne({ _id: idDel });
+    data = await UserModel.updateOne({ _id: idDel }, { active: "false" });
     res.json(data);
   }
   catch (err) {
